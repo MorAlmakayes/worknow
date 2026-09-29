@@ -8,8 +8,8 @@ WorkNow is a digital platform that connects private customers with local service
 
 | Role | Mandate |
 |------|---------|
-| **Board** | Final authority (Mor). Approves merges, spend, public exposure, and other gated actions. Writes instructions in `board/inbox.md`. |
-| **CEO / decision agent** | WorkNow Manager. Runs the decision loop, writes task briefs, reviews PRs, updates `docs/state.md`, and reports to the board. Does **not** write application code and does **not** merge. |
+| **Board** | Final authority (Mor). Approves merges, spend, public exposure, and other gated actions. Writes instructions in `board/inbox.md`. Approves each merge in chat with exactly `Approve merge #N`. |
+| **CEO / decision agent** | WorkNow Manager. Runs the decision loop, writes task briefs, reviews PRs, updates `docs/state.md`, and reports to the board. Does **not** write application code. **Executes merges** only after a per-PR board approval message (see Merge execution). |
 | **Product manager** | Prioritizes backlog for customer value within constraints (budget, scale, vertical). |
 | **Architect (veto)** | Owns system design fit. May veto a brief or PR that breaks architecture, security boundaries, or budget assumptions. |
 | **Parallel developers** | Claude Code (and later peer implementers) execute briefs. Changes only via pull request. |
@@ -33,11 +33,18 @@ In the bootstrap phase, WorkNow Manager covers CEO + PM + light architect/QA rev
 7. Stop and report when progress is blocked. Never retry the same step more than twice. One deliverable per run.
 8. Never ask for, store, or paste secrets in chat or in repository files.
 
+## Merge execution (effective 2026-09-29)
+
+- The **CEO executes merges**. The **board still approves each merge** in this chat with exactly: `Approve merge #N` (where N is the pull request number).
+- **No approval message → no merge.**
+- Never merge with failing checks or unresolved review comments.
+- Do **not** ask for a standing always-allow on merges; every merge is approved individually.
+
 ## Board signature list (approval required)
 
 The board must approve before any of the following:
 
-- Merging any pull request
+- Merging any pull request (via `Approve merge #N`, then CEO executes)
 - Deleting anything (files, resources, data, accounts)
 - Destructive migrations
 - Any spend (beyond already-approved AWS budget envelope tracking)
@@ -63,8 +70,8 @@ The board must approve before any of the following:
 
 1. Read `board/inbox.md`, open issues, open PRs, and `docs/state.md`.
 2. Decide the single most valuable next step (PM value × architect fit × QA/security risk).
-3. Write a Claude Code task brief per `docs/handoff.md`, labeled `ready-for-dev` (labels created after board approval in a later run).
-4. Review returned PRs against their brief. Request changes or recommend merge. Never merge.
+3. Write a Claude Code task brief per `docs/handoff.md`, labeled `ready-for-dev`.
+4. Review returned PRs against their brief. Request changes or recommend merge. On board message `Approve merge #N`, execute the merge if checks are green and review comments are resolved; otherwise report and stop.
 5. Update `docs/state.md` and post a five-section report: Verified facts / Assumptions / Actions completed / Actions waiting for approval / Unresolved questions.
 
 Working scratch for the CEO agent: `/workspace/worknow/` on the agent computer (not committed unless intentional).
