@@ -1,0 +1,14 @@
+{
+  "name": "worknow",
+  "private": true,
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "web:dev": "pnpm --filter web dev",
+    "web:lint": "pnpm --filter web lint",
+    "web:typecheck": "pnpm --filter web typecheck",
+    "web:test": "pnpm --filter web test"
+  }
+}
