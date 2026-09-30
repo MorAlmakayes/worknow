@@ -1,0 +1,32 @@
+[project]
+name = "worknow-infra"
+version = "0.1.0"
+description = "WorkNow infrastructure (AWS CDK, Python). Skeleton only - no deploy."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "aws-cdk-lib>=2.170,<3",
+    "constructs>=10,<11",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["worknow_infra*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
